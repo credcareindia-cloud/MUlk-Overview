@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MULK International - Project Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1a1d35;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #2d3150;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e2337 0%, #252b47 100%);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #9ca3af;
+        }
+
+        .tabs {
+            display: flex;
+            background: #12152b;
+            border-bottom: 2px solid #2d3150;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 #12152b;
+        }
+
+        /* Custom scrollbar for webkit browsers */
+        .tabs::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .tabs::-webkit-scrollbar-track {
+            background: #12152b;
+            border-radius: 10px;
+        }
+
+        .tabs::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 10px;
+            border: 1px solid #1e40af;
+        }
+
+        .tabs::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .tab-button {
+            flex: 0 0 auto;
+            min-width: 180px;
+            padding: 18px 30px;
+            background: #1a1d35;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-right: 1px solid #2d3150;
+            white-space: nowrap;
+            color: #9ca3af;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tab-button .project-name {
+            font-weight: 700;
+        }
+
+        .tab-button .project-subtitle {
+            font-size: 13px;
+            font-weight: 400;
+            color: #6b7280;
+        }
+
+        .tab-button:hover {
+            background: #252b47;
+            color: #3b82f6;
+        }
+
+        .tab-button:hover .project-subtitle {
+            color: #3b82f6;
+        }
+
+        .tab-button.active {
+            background: #252b47;
+            color: #3b82f6;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .tab-button.active .project-subtitle {
+            color: #60a5fa;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s;
+            background: #1a1d35;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .project-info {
+            background: #252b47;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3b82f6;
+        }
+
+        .project-info h2 {
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .project-info .start-date {
+            color: #9ca3af;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .month-section {
+            margin-bottom: 20px;
+            border: 1px solid #2d3150;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #12152b;
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .month-header:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+        }
+
+        .month-header h3 {
+            font-size: 1.3em;
+        }
+
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s;
+        }
+
+        .month-header.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .month-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #1a1d35;
+        }
+
+        .month-content.expanded {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .week-item {
+            padding: 20px;
+            border-bottom: 1px solid #2d3150;
+            background: #252b47;
+            margin: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .week-item:last-child {
+            border-bottom: none;
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .week-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #ffffff;
+        }
+
+        .status {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status.completed {
+            background: #065f46;
+            color: #d1fae5;
+            border: 1px solid #10b981;
+        }
+
+        .status.partially {
+            background: #78350f;
+            color: #fef3c7;
+            border: 1px solid #f59e0b;
+        }
+
+        .status.pending {
+            background: #7f1d1d;
+            color: #fecaca;
+            border: 1px solid #ef4444;
+        }
+
+        .remarks {
+            margin-top: 12px;
+            padding: 12px;
+            background: #1a1d35;
+            border-left: 4px solid #3b82f6;
+            border-radius: 4px;
+        }
+
+        .remarks strong {
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .remarks-text {
+            color: #d1d5db;
+            line-height: 1.6;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .tab-button:not(.active) {
+                display: none;
+            }
+            
+            .month-content {
+                max-height: none !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .tab-button {
+                padding: 15px 20px;
+                font-size: 14px;
+            }
+            
+            .week-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MULK INTERNATIONAL TECH TEAM</h1>
+            <p>Project Overview - created by shibin sha</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'project1')">
+                <span class="project-name">Project 1</span>
+                <span class="project-subtitle">(Uniqube 3D)</span>
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'project2')">
+                <span class="project-name">Project 2</span>
+                <span class="project-subtitle">(Alubond-web)</span>
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'project3')">
+                <span class="project-name">Project 3</span>
+                <span class="project-subtitle">(Uniqube-web)</span>
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'project4')">
+                <span class="project-name">Project 4</span>
+                <span class="project-subtitle">(Auto-Estimation)</span>
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'project5')">
+                <span class="project-name">Project 5</span>
+                <span class="project-subtitle">(Uniqube-IOT)</span>
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'project6')">
+                <span class="project-name">Project 6</span>
+                <span class="project-subtitle">(AI Assistant)</span>
+            </button>
+            <button class="tab-button" onclick="openTab(event, 'project7')">
+                <span class="project-name">Project 7</span>
+                <span class="project-subtitle">(Shipment Automation)</span>
+            </button>
+        </div>
+
+        <!-- Project 1 -->
+        <div id="project1" class="tab-content active">
+            <div class="project-info">
+                <h2>Uniqube 3D - From Designing to Packing Automation</h2>
+                <p class="start-date">Started on: 01-10-2025</p>
+            </div>
+
+            <!-- November 2025 -->
+            <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Nov 8-14)</span>
+                            <span class="status partially">ongoing</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Current week in progress.</p>
+                            <p class="remarks-text">Working on project Deployment (For Testing not a Production Deployment).</p>
+                            <p class="remarks-text">From 12 to 14 Working on QR code Data Showing(Priority task postponed 2D till 14-11-2025).</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Nov 1-7)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">First phase completed successfully.</p>
+                            <p class="remarks-text">Implemented Members viewing for groups/status inside viewer.</p>
+                            <p class="remarks-text">Started procedures for Hosting.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- October 2025 -->
+            <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Oct 22-31)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Element Highlight and Focus.</p>
+                            <p class="remarks-text">Docker setup.</p>
+                            <p class="remarks-text">3D Viewer.</p>
+                            <p class="remarks-text">Admin Dashboard.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 3 (Oct 15-21)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Real-time progress</p>
+                            <p class="remarks-text">Panel management.</p>
+                            <p class="remarks-text">Authentication system implemented.</p>
+                            <p class="remarks-text">Backend API development complete.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Oct 8-14)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">IFC file conversion completed.</p>
+                            <p class="remarks-text">UI/UX design completed.</p>
+                            <p class="remarks-text">Project Creation panel and group management features implemented.</p>
+                            <p class="remarks-text">Core architecture designed and approved. Database schema finalized.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Oct 1-7)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Data Base and Storage system implemented.</p>
+                            <p class="remarks-text">500MB+ Large File support.</p>
+                            <p class="remarks-text">Initial project setup completed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div id="project2" class="tab-content">
+            <div class="project-info">
+                <h2>Alubond Web redesigning</h2>
+                <p class="start-date">Started on: Next week</p>
+            </div>
+
+            <!-- November 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1-2 (Nov 1-10)</span>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Awaiting client feedback on dashboard design. Planning next phase of implementation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- October 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1-4 (Oct 1-31)</span>
+                            <span class="status partially">Partially Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Data pipeline development 60% complete. Real-time monitoring dashboard in progress.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- September 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>September 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Sep 22-30)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Network infrastructure setup completed. Gateway configuration finalized.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 3 (Sep 15-21)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">IoT sensor procurement and initial testing completed successfully.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <!-- Project 3 -->
+        <div id="project3" class="tab-content">
+            <div class="project-info">
+                <h2>Uniqube-web Redesigning</h2>
+                <p class="start-date">Started on: next week</p>
+            </div>
+
+            <!-- November 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Nov 8-10)</span>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Current week. Scheduled for system architecture finalization and vendor selection.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Nov 1-7)</span>
+                            <span class="status partially">Partially Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">System design phase ongoing. Hardware selection in progress with vendor evaluation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- October 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Oct 20-31)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Project kickoff meeting held. Requirements gathering and technical documentation completed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <!-- Project 4 -->
+        <div id="project4" class="tab-content">
+            <div class="project-info">
+                <h2>Cost Auto Estimation Generation</h2>
+                <p class="start-date">Started on: planning Stage</p>
+            </div>
+
+            <!-- November 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Nov 8-10)</span>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Current week. Scheduled for system architecture finalization and vendor selection.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Nov 1-7)</span>
+                            <span class="status partially">Partially Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">System design phase ongoing. Hardware selection in progress with vendor evaluation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- October 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Oct 20-31)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Project kickoff meeting held. Requirements gathering and technical documentation completed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <!-- Project 5 -->
+        <div id="project5" class="tab-content">
+            <div class="project-info">
+                <h2>IOT-Integration on Uniqube Pods</h2>
+                <p class="start-date">Started on: Planning stage</p>
+            </div>
+
+            <!-- November 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Nov 8-10)</span>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Current week. Scheduled for system architecture finalization and vendor selection.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Nov 1-7)</span>
+                            <span class="status partially">Partially Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">System design phase ongoing. Hardware selection in progress with vendor evaluation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- October 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Oct 20-31)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Project kickoff meeting held. Requirements gathering and technical documentation completed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <!-- Project 6 -->
+        <div id="project6" class="tab-content">
+            <div class="project-info">
+                <h2>Agentic Automation</h2>
+                <p class="start-date">Started on: Planning Stage</p>
+            </div>
+
+            <!-- November 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Nov 8-10)</span>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Current week. Scheduled for system architecture finalization and vendor selection.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Nov 1-7)</span>
+                            <span class="status partially">Partially Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">System design phase ongoing. Hardware selection in progress with vendor evaluation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- October 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Oct 20-31)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Project kickoff meeting held. Requirements gathering and technical documentation completed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+        <!-- Project 7 -->
+        <div id="project7" class="tab-content">
+            <div class="project-info">
+                <h2>Cargo and Freights</h2>
+                <p class="start-date">Started on: Planning Stage</p>
+            </div>
+
+            <!-- November 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>November 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 2 (Nov 8-10)</span>
+                            <span class="status pending">Pending</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Current week. Scheduled for system architecture finalization and vendor selection.</p>
+                        </div>
+                    </div>
+
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 1 (Nov 1-7)</span>
+                            <span class="status partially">Partially Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">System design phase ongoing. Hardware selection in progress with vendor evaluation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- October 2025 -->
+            <!-- <div class="month-section">
+                <div class="month-header" onclick="toggleMonth(this)">
+                    <h3>October 2025</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="month-content">
+                    <div class="week-item">
+                        <div class="week-header">
+                            <span class="week-title">Week 4 (Oct 20-31)</span>
+                            <span class="status completed">Completed</span>
+                        </div>
+                        <div class="remarks">
+                            <strong>Remarks:</strong>
+                            <p class="remarks-text">Project kickoff meeting held. Requirements gathering and technical documentation completed.</p>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, projectId) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Remove active class from all buttons
+            const tabButtons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+
+            // Show the selected tab and mark button as active
+            document.getElementById(projectId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function toggleMonth(header) {
+            const content = header.nextElementSibling;
+            const isExpanded = content.classList.contains('expanded');
+
+            if (isExpanded) {
+                content.classList.remove('expanded');
+                header.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                header.classList.add('expanded');
+            }
+        }
+
+        // Auto-expand current month on page load
+        window.addEventListener('load', function() {
+            const currentDate = new Date();
+            const currentMonth = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+            
+            const monthHeaders = document.querySelectorAll('.month-header h3');
+            monthHeaders.forEach(header => {
+                if (header.textContent === currentMonth) {
+                    toggleMonth(header.parentElement);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
